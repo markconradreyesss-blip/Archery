@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="ArrowPoint Archery Range reservation and front-desk management system.">
+<title>ArrowPoint Archery Range</title>
+<style>
+:root{
+  --bg:#f5f7f4;--surface:#fff;--surface2:#eef3ef;--ink:#15231c;--muted:#68756e;
+  --green:#0d2a20;--green2:#174536;--mint:#e7f4ed;--accent:#c77b2f;--line:#dbe2dd;
+  --danger:#a53b3b;--dangerbg:#f9e6e6;--warn:#8b651c;--warnbg:#fff3d9;--blue:#315f8f;--bluebg:#e7f0fb;
+  --shadow:0 12px 30px rgba(21,35,28,.08);--radius:18px;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}.hidden{display:none!important}
+.container{width:min(1180px,calc(100% - 32px));margin:auto}
+.nav{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav-inner{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{font-weight:900;letter-spacing:-.04em;font-size:1.18rem}.brand span{color:var(--accent)}
+.nav-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.btn{border:0;border-radius:10px;padding:10px 15px;font-weight:800;background:var(--green);color:#fff}.btn:hover{filter:brightness(1.08)}.btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}.btn.accent{background:var(--accent)}.btn.danger{background:var(--danger)}.btn.warn{background:#a9761f}.btn.small{padding:7px 10px;font-size:.84rem}
+.hero{min-height:570px;display:grid;place-items:center;background:linear-gradient(90deg,rgba(8,25,19,.82),rgba(8,25,19,.35)),url("https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1200,h_630/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/r7mtiabc3rhmseosmctg/%D0%A2%D0%B0%D0%B9%D1%87%D0%B6%D1%83%D0%BD:%20%D0%BF%D0%BE%D0%BB%D0%B8%D0%B3%D0%BE%D0%BD%20%D0%B4%D0%BB%D1%8F%20%D1%81%D1%82%D1%80%D0%B5%D0%BB%D1%8C%D0%B1%D1%8B%20%D0%B8%D0%B7%20%D0%BB%D1%83%D0%BA%D0%B0%20%D0%9F%D1%80%D0%BE%D1%81%D0%B2%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D1%8F%20%E2%80%93%20%D0%BE%D0%BF%D1%8B%D1%82%20%D1%81%D1%82%D1%80%D0%B5%D0%BB%D1%8C%D0%B1%D1%8B%20%D0%B8%D0%B7%20%D0%BB%D1%83%D0%BA%D0%B0%20%D0%B2%20%D0%B7%D0%B2%D0%B5%D0%B7%D0%B4%D0%BD%D0%BE%D0%BC%20%D1%81%D0%B2%D0%B5%D1%82%D0%B5.jpg") center/cover;color:#fff}
+.hero-content{padding:90px 0;max-width:740px}.eyebrow{text-transform:uppercase;letter-spacing:.15em;font-size:.76rem;font-weight:900}.hero h1{font-size:clamp(2.7rem,7vw,5.3rem);line-height:.97;letter-spacing:-.06em;margin:14px 0 20px}.hero p{font-size:1.15rem;max-width:660px;opacity:.92}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.section{padding:72px 0}.section h2{font-size:clamp(1.9rem,4vw,2.8rem);margin:0 0 9px;letter-spacing:-.04em}.lead{color:var(--muted);max-width:720px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}.card,.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.card{padding:24px}.card h3{margin:0 0 7px}.card p{color:var(--muted);margin:0}.icon{font-size:1.8rem;margin-bottom:12px}
+.app-section{background:#edf1ee}.panel{padding:24px;margin-top:20px}.auth-wrap{display:grid;grid-template-columns:1fr 1fr;gap:20px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label{font-weight:750;font-size:.9rem}
+input,select,textarea{width:100%;border:1px solid #cdd7d0;background:#fff;border-radius:10px;padding:11px 12px;color:var(--ink);outline:none}input:focus,select:focus,textarea:focus{border-color:var(--green2);box-shadow:0 0 0 3px rgba(23,69,54,.1)}textarea{min-height:88px;resize:vertical}.form-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.status{min-height:22px;margin-top:9px;font-size:.9rem}.status.error{color:var(--danger)}.status.ok{color:#28704c}
+.dashboard-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px}.user-chip{color:var(--muted);font-size:.9rem}.notice{padding:12px 14px;background:#f5f8f5;border:1px solid var(--line);border-radius:12px;color:var(--muted);margin-bottom:16px}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:13px;margin-top:16px}table{width:100%;border-collapse:collapse;min-width:780px;background:#fff}th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#f1f5f2;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:#516058}td{font-size:.88rem}.pill{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-size:.75rem;font-weight:850;background:#edf1ee}.pill.ok{background:var(--mint);color:#17633f}.pill.warn{background:var(--warnbg);color:var(--warn)}.pill.bad{background:var(--dangerbg);color:#913333}.pill.blue{background:var(--bluebg);color:#2c5682}.muted{color:var(--muted);font-size:.82rem}
+footer{padding:34px 0;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+
+/* Admin shell */
+.admin-shell{display:grid;grid-template-columns:230px 1fr;min-height:650px;background:#f7f9f7;border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.admin-side{background:#fff;border-right:1px solid var(--line);padding:22px 15px;display:flex;flex-direction:column}.admin-profile{padding:4px 9px 18px;border-bottom:1px solid var(--line);margin-bottom:12px}.admin-avatar{font-weight:900;font-size:1.25rem}.admin-role{color:var(--muted);font-size:.82rem;margin-top:2px}.side-nav{display:flex;flex-direction:column;gap:4px}.side-btn{width:100%;text-align:left;border:0;background:transparent;color:#53625b;border-radius:12px;padding:11px 10px;font-weight:800}.side-btn:hover{background:#f1f5f2}.side-btn.active{background:#e8f5ee;color:#17633f}.admin-main{min-width:0}.admin-top{padding:22px 24px 12px;background:#f7f9f7}.admin-topline{display:flex;align-items:center;justify-content:space-between;gap:15px}.admin-top h2{margin:0;font-size:2rem;letter-spacing:-.045em}.admin-top p{margin:3px 0;color:var(--muted)}.admin-content{padding:10px 24px 26px}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin:12px 0 18px}.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}.stat strong{display:block;font-size:1.5rem;letter-spacing:-.04em}.stat span{color:var(--muted);font-size:.78rem;font-weight:700}.admin-toolbar{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0}.filter-group{display:flex;gap:6px;flex-wrap:wrap}.filter-btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 11px;font-weight:800;color:#53625b}.filter-btn.active{background:var(--green);color:#fff;border-color:var(--green)}.search{max-width:250px}.admin-view{display:none}.admin-view.active{display:block}.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.mini-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:17px}.mini-card h3{margin:0 0 7px}.mini-card p{margin:0;color:var(--muted)}.lane-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:15px}.lane-card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px}.lane-card strong{display:block}.lane-card .lane-state{font-size:.78rem;font-weight:800;margin-top:5px}.lane-card.open .lane-state{color:#28704c}.lane-card.closed .lane-state{color:var(--danger)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(9,19,14,.46);z-index:100;display:grid;place-items:center;padding:18px}.modal{width:min(700px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:20px;border:1px solid var(--line);box-shadow:0 25px 70px rgba(0,0,0,.22);padding:22px}.modal-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.close{border:0;background:#eef2ef;border-radius:9px;padding:7px 10px;font-weight:900}.modal h3{margin:0}.modal-sub{color:var(--muted);font-size:.88rem;margin:4px 0 16px}
+
+@media(max-width:980px){.admin-shell{grid-template-columns:1fr}.admin-side{border-right:0;border-bottom:1px solid var(--line);padding:12px;}.side-nav{display:grid;grid-template-columns:repeat(3,1fr)}.stats{grid-template-columns:repeat(3,1fr)}.lane-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:800px){.cards,.auth-wrap{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.container{width:min(100% - 22px,1180px)}.nav-inner{padding:10px 0;align-items:flex-start}.hero{min-height:520px}.section{padding:54px 0}.mini-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.admin-top h2{font-size:1.55rem}.admin-content,.admin-top{padding-left:14px;padding-right:14px}}
+@media(max-width:520px){.nav-actions .btn{padding:8px 10px;font-size:.82rem}.side-nav{grid-template-columns:1fr 1fr}.lane-grid{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="#top">ArrowPoint <span>Archery</span></a>
+    <div class="nav-actions" id="publicNav">
+      <a class="btn secondary" href="#services">Services</a>
+      <a class="btn secondary" href="#app">Reservations</a>
+      <button class="btn" id="navAuthBtn">Login / Register</button>
+    </div>
+    <div class="nav-actions hidden" id="signedNav">
+      <a class="btn secondary" href="#app">Dashboard</a>
+      <button class="btn" id="navLogoutBtn">Log out</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="container hero-content">
+    <div class="eyebrow">Indoor archery range</div>
+    <h1>Take aim. Find your line.</h1>
+    <p>ArrowPoint gives beginners, families, and experienced archers a simple way to reserve a safe, well-maintained shooting lane.</p>
+    <div class="hero-actions">
+      <a class="btn accent" href="#app">Book a Lane</a>
+      <a class="btn secondary" href="#services">View Services</a>
+    </div>
+  </div>
+</header>
+
+<section class="section" id="services">
+  <div class="container">
+    <div class="eyebrow" style="color:var(--accent)">What we offer</div>
+    <h2>Practice at your pace.</h2>
+    <p class="lead">Reserve online, arrive prepared, and spend your session focused on archery instead of waiting in line.</p>
+    <div class="cards">
+      <article class="card"><div class="icon">🏹</div><h3>Lane Practice</h3><p>Reserve a range lane for individual practice or small groups.</p></article>
+      <article class="card"><div class="icon">🎯</div><h3>Beginner Session</h3><p>A guided introduction for first-time archers and casual visitors.</p></article>
+      <article class="card"><div class="icon">🛡️</div><h3>Equipment Rental</h3><p>Ask the range team about available bows, arrows and safety equipment.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section app-section" id="app">
+<div class="container">
+  <div id="authPanel" class="panel">
+    <div class="dashboard-head"><div><div class="eyebrow" style="color:var(--accent)">Online reservation system</div><h2>Manage your range time</h2><p class="lead">Create an account to reserve a lane. Administrators get the full front-desk dashboard after login.</p></div></div>
+    <div class="auth-wrap" style="margin-top:20px">
+      <form id="loginForm"><h3>Login</h3>
+        <div class="field"><label>Email</label><input id="loginEmail" type="email" required></div>
+        <div class="field" style="margin-top:10px"><label>Password</label><input id="loginPassword" type="password" required></div>
+        <div class="form-actions"><button class="btn" type="submit">Login</button></div><div id="loginStatus" class="status"></div>
+      </form>
+      <form id="registerForm"><h3>Create account</h3>
+        <div class="field"><label>Full name</label><input id="registerName" maxlength="100" required></div>
+        <div class="field" style="margin-top:10px"><label>Phone</label><input id="registerPhone" maxlength="30" placeholder="09xxxxxxxxx"></div>
+        <div class="field" style="margin-top:10px"><label>Email</label><input id="registerEmail" type="email" required></div>
+        <div class="field" style="margin-top:10px"><label>Password</label><input id="registerPassword" type="password" minlength="8" required></div>
+        <div class="form-actions"><button class="btn accent" type="submit">Register</button></div><div id="registerStatus" class="status"></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="customerDashboard" class="hidden">
+    <div class="dashboard-head"><div><div class="eyebrow" style="color:var(--accent)">Customer dashboard</div><h2>Book an archery lane</h2><p class="lead">Choose a service, schedule and lane. Payment can be settled through GCash or at the range.</p></div><div id="customerChip" class="user-chip"></div></div>
+    <div class="panel">
+      <form id="reservationForm">
+        <input type="hidden" id="reservationId">
+        <div class="grid">
+          <div class="field"><label>Date</label><input id="bookingDate" type="date" required></div>
+          <div class="field"><label>Start time</label><input id="bookingTime" type="time" required></div>
+          <div class="field"><label>Service</label><select id="serviceId" required></select></div>
+          <div class="field"><label>Lane</label><select id="lane" required></select></div>
+          <div class="field"><label>Number of archers</label><input id="guests" type="number" min="1" max="10" value="1" required></div>
+          <div class="field"><label>Payment method</label><select id="paymentMethod"><option value="gcash">GCash</option><option value="cash">Cash at range</option></select></div>
+          <div class="field full"><label>Notes</label><textarea id="notes" maxlength="500" placeholder="Optional booking notes"></textarea></div>
+        </div>
+        <div class="notice" style="margin-top:14px"><strong>Estimated amount:</strong> <span id="estimatedAmount">₱0.00</span></div>
+        <div class="form-actions"><button class="btn accent" id="saveReservationBtn" type="submit">Create Reservation</button><button class="btn secondary hidden" id="cancelEditBtn" type="button">Cancel Edit</button><button class="btn secondary" id="customerLogoutBtn" type="button">Log out</button></div>
+        <div id="reservationStatus" class="status"></div>
+      </form>
+    </div>
+    <div class="panel">
+      <h3>My Reservations</h3>
+      <div class="table-wrap"><table><thead><tr><th>Booking</th><th>Schedule</th><th>Lane</th><th>Payment</th><th>Status</th><th>Actions</th></tr></thead><tbody id="customerRows"></tbody></table></div>
+    </div>
+  </div>
+
+  <div id="adminDashboard" class="hidden">
+    <div class="admin-shell">
+      <aside class="admin-side">
+        <div class="admin-profile"><div class="admin-avatar" id="adminName">Admin</div><div class="admin-role">Range Administrator</div></div>
+        <div class="side-nav">
+          <button class="side-btn active" data-view="overview">▦ Overview</button>
+          <button class="side-btn" data-view="bookings">☷ Manage Bookings</button>
+          <button class="side-btn" data-view="lanes">⌑ Manage Lanes</button>
+          <button class="side-btn" data-view="services">◈ Manage Services</button>
+          <button class="side-btn" data-view="users">♙ Manage Users</button>
+        </div>
+        <div style="margin-top:auto;padding-top:18px"><button class="side-btn" id="adminLogoutBtn">↪ Log out</button></div>
+      </aside>
+
+      <main class="admin-main">
+        <div class="admin-top">
+          <div class="admin-topline"><div><div class="eyebrow" style="color:var(--accent)">Operations</div><h2 id="adminTitle">Booking management</h2><p id="adminSubtitle">Reservations, payments, check-in and lane sessions.</p></div><button class="btn small" id="refreshAdminBtn">Refresh</button></div>
+        </div>
+        <div class="admin-content">
+          <section class="admin-view active" id="view-overview">
+            <div class="stats" id="adminStats"></div>
+            <div class="mini-grid">
+              <div class="mini-card"><h3>Today's schedule</h3><p id="todaySummary">Loading…</p></div>
+              <div class="mini-card"><h3>Payment queue</h3><p id="paymentSummary">Loading…</p></div>
+              <div class="mini-card"><h3>Live lanes</h3><p id="laneSummary">Loading…</p></div>
+            </div>
+            <div class="panel" style="box-shadow:none;margin-top:16px"><h3>Upcoming reservations</h3><div class="table-wrap"><table><thead><tr><th>Booking</th><th>Customer</th><th>Time</th><th>Lane</th><th>Status</th><th>Payment</th></tr></thead><tbody id="upcomingRows"></tbody></table></div></div>
+          </section>
+
+          <section class="admin-view" id="view-bookings">
+            <div class="admin-toolbar">
+              <div class="filter-group" id="filterGroup">
+                <button class="filter-btn active" data-filter="all">All</button><button class="filter-btn" data-filter="pending">Pending</button><button class="filter-btn" data-filter="confirmed">Confirmed</button><button class="filter-btn" data-filter="checked_in">Checked In</button><button class="filter-btn" data-filter="in_progress">On Lane</button><button class="filter-btn" data-filter="completed">Completed</button><button class="filter-btn" data-filter="cancelled">Cancelled</button><button class="filter-btn" data-filter="no_show">No-show</button>
+              </div>
+              <input class="search" id="bookingSearch" placeholder="Search customer or booking…">
+            </div>
+            <div class="table-wrap"><table><thead><tr><th>Customer</th><th>Lane</th><th>Schedule</th><th>Payment</th><th>Status</th><th>Amount</th><th>Actions</th></tr></thead><tbody id="adminRows"></tbody></table></div>
+          </section>
+
+          <section class="admin-view" id="view-lanes">
+            <div class="notice"><strong>Range control:</strong> temporarily close a lane for maintenance or other operational reasons. Closed lanes cannot be selected for new bookings.</div>
+            <div class="lane-grid" id="laneGrid"></div>
+          </section>
+
+          <section class="admin-view" id="view-services">
+            <div class="admin-toolbar"><div><h3 style="margin:0">Services and pricing</h3><span class="muted">Edit the services customers can reserve.</span></div><button class="btn" id="addServiceBtn">+ Add service</button></div>
+            <div class="table-wrap"><table><thead><tr><th>Service</th><th>Description</th><th>Duration</th><th>Price</th><th>Active</th><th>Actions</th></tr></thead><tbody id="serviceRows"></tbody></table></div>
+          </section>
+
+          <section class="admin-view" id="view-users">
+            <div class="notice"><strong>User management:</strong> admins can review customers and assign the administrator role. Passwords remain managed by Supabase Auth.</div>
+            <div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="userRows"></tbody></table></div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+</section>
+
+<footer><div class="container">© <span id="year"></span> ArrowPoint Archery Range · Reservation & front-desk system</div></footer>
+
+<div class="modal-backdrop hidden" id="modalBackdrop">
+  <div class="modal">
+    <div class="modal-head"><div><h3 id="modalTitle">Edit reservation</h3><div class="modal-sub" id="modalSub"></div></div><button class="close" id="closeModal">×</button></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://dstffbfkoinxleineipb.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_N7MLdxt2aof-vIXx_Ndwjw_gyXOjTb_";
+const configured=!SUPABASE_URL.includes("YOUR_")&&!SUPABASE_ANON_KEY.includes("YOUR_");
+const sb=configured?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+const $=id=>document.getElementById(id);
+$("year").textContent=new Date().getFullYear();
+
+let currentUser=null,currentProfile=null,services=[],lanes=[],adminBookings=[],adminUsers=[],adminFilter="all";
+
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+const money=v=>"₱"+Number(v||0).toLocaleString("en-PH",{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmt=v=>new Date(v).toLocaleString([],{year:"numeric",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
+const todayKey=()=>new Date().toLocaleDateString("en-CA");
+const statusPill=s=>{
+  const ok=["confirmed","checked_in","in_progress","completed","paid"].includes(s), warn=["pending","pending_verification","unpaid"].includes(s), bad=["cancelled","no_show","refunded"].includes(s);
+  return `<span class="pill ${ok?"ok":warn?"warn":bad?"bad":"blue"}">${esc(String(s).replaceAll("_"," "))}</span>`;
+};
+function status(id,msg,ok=false){const e=$(id);if(!e)return;e.textContent=msg||"";e.className="status "+(msg?(ok?"ok":"error"):"");}
+function showOnly(id){["authPanel","customerDashboard","adminDashboard"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");}
+function goApp(){ $("app").scrollIntoView({behavior:"smooth"}); }
+
+$("navAuthBtn").onclick=goApp;
+$("navLogoutBtn").onclick=()=>sb?.auth.signOut();
+$("customerLogoutBtn").onclick=()=>sb?.auth.signOut();
+$("adminLogoutBtn").onclick=()=>sb?.auth.signOut();
+
+$("loginForm").onsubmit=async e=>{
+  e.preventDefault(); if(!sb)return;
+  status("loginStatus","Signing in…");
+  const {error}=await sb.auth.signInWithPassword({email:$("loginEmail").value.trim(),password:$("loginPassword").value});
+  if(error)status("loginStatus",error.message);else status("loginStatus","Logged in.",true);
+};
+$("registerForm").onsubmit=async e=>{
+  e.preventDefault();if(!sb)return;
+  status("registerStatus","Creating account…");
+  const full_name=$("registerName").value.trim(),phone=$("registerPhone").value.trim(),email=$("registerEmail").value.trim(),password=$("registerPassword").value;
+  const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name,phone}}});
+  if(error)status("registerStatus",error.message);
+  else if(data.session)status("registerStatus","Account created and signed in.",true);
+  else status("registerStatus","Account created. Check your email if confirmation is enabled.",true);
+};
+
+async function loadProfile(){
+  const {data,error}=await sb.from("profiles").select("id,full_name,email,phone,role").eq("id",currentUser.id).single();
+  if(error)throw error;currentProfile=data;
+}
+async function loadServices(){
+  const {data,error}=await sb.from("services").select("*").order("name");
+  if(error)throw error;services=data||[];
+  $("serviceId").innerHTML=services.filter(x=>x.active).map(s=>`<option value="${s.id}">${esc(s.name)} — ${money(s.price)}</option>`).join("");
+  updateEstimate();
+}
+async function loadLanes(){
+  const {data,error}=await sb.from("range_lanes").select("*").order("lane_number");
+  if(error)throw error;lanes=data||[];
+  $("lane").innerHTML=lanes.filter(l=>l.active).map(l=>`<option value="${l.lane_number}">Lane ${l.lane_number}${l.name&&l.name!=="Lane "+l.lane_number?" — "+esc(l.name):""}</option>`).join("");
+}
+function updateEstimate(){const s=services.find(x=>x.id===$("serviceId").value);$("estimatedAmount").textContent=money(s?.price||0);}
+$("serviceId").onchange=updateEstimate;
+
+function resetCustomerForm(){
+  $("reservationId").value="";$("bookingDate").value="";$("bookingTime").value="";$("guests").value="1";$("notes").value="";
+  $("saveReservationBtn").textContent="Create Reservation";$("cancelEditBtn").classList.add("hidden");
+}
+$("cancelEditBtn").onclick=resetCustomerForm;
+
+async function loadCustomerBookings(){
+  const {data,error}=await sb.from("reservations").select("*,services(name),profiles(full_name,email)").eq("user_id",currentUser.id).order("start_time",{ascending:false});
+  if(error){status("reservationStatus",error.message);return;}
+  $("customerRows").innerHTML=(data||[]).map(r=>`<tr>
+    <td><strong>${esc(r.booking_code)}</strong><br><span class="muted">${esc(r.services?.name||"")}</span></td>
+    <td>${fmt(r.start_time)}<br><span class="muted">${Math.round((new Date(r.end_time)-new Date(r.start_time))/60000)} min</span></td>
+    <td>Lane ${r.lane_number}<br><span class="muted">${r.guests} archer(s)</span></td>
+    <td>${statusPill(r.payment_status)}<br><span class="muted">${esc(r.payment_method)}</span></td>
+    <td>${statusPill(r.status)}</td>
+    <td><button class="btn small secondary" onclick="customerEdit('${r.id}')">Edit</button> <button class="btn small danger" onclick="customerCancel('${r.id}')">Cancel</button></td>
+  </tr>`).join("")||`<tr><td colspan="6">No reservations yet.</td></tr>`;
+}
+async function customerEdit(id){
+  const {data,error}=await sb.from("reservations").select("*").eq("id",id).single();if(error)return status("reservationStatus",error.message);
+  const s=new Date(data.start_time),d=new Date(data.end_time),mins=Math.round((d-s)/60000);
+  $("reservationId").value=id;$("bookingDate").value=s.toLocaleDateString("en-CA");$("bookingTime").value=s.toTimeString().slice(0,5);
+  $("serviceId").value=data.service_id||"";$("lane").value=data.lane_number;$("guests").value=data.guests;$("paymentMethod").value=data.payment_method;$("notes").value=data.notes||"";
+  $("saveReservationBtn").textContent="Update Reservation";$("cancelEditBtn").classList.remove("hidden");updateEstimate();goApp();
+}
+async function customerCancel(id){
+  if(!confirm("Cancel this reservation?"))return;
+  const {error}=await sb.from("reservations").update({status:"cancelled",cancelled_at:new Date().toISOString()}).eq("id",id).eq("user_id",currentUser.id);
+  if(error)status("reservationStatus",error.message);else{status("reservationStatus","Reservation cancelled.",true);loadCustomerBookings();}
+}
+window.customerEdit=customerEdit;window.customerCancel=customerCancel;
+
+$("reservationForm").onsubmit=async e=>{
+  e.preventDefault();if(!sb||!currentUser)return;
+  const id=$("reservationId").value,date=$("bookingDate").value,time=$("bookingTime").value,service_id=$("serviceId").value,lane_number=Number($("lane").value),guests=Number($("guests").value),payment_method=$("paymentMethod").value,notes=$("notes").value.trim();
+  const service=services.find(x=>x.id===service_id);const start=new Date(`${date}T${time}:00`);if(!service||!date||!time||Number.isNaN(start.getTime())||start<=new Date())return status("reservationStatus","Choose a valid future date, time and service.");
+  const end=new Date(start.getTime()+service.duration_minutes*60000);
+  const payload={service_id,start_time:start.toISOString(),end_time:end.toISOString(),lane_number,guests,payment_method,notes,customer_name:currentProfile.full_name,customer_phone:currentProfile.phone||"",amount_due:service.price};
+  status("reservationStatus",id?"Updating…":"Creating…");
+  const q=id?await sb.from("reservations").update(payload).eq("id",id).eq("user_id",currentUser.id):await sb.from("reservations").insert({...payload,user_id:currentUser.id});
+  if(q.error)return status("reservationStatus",q.error.message);
+  status("reservationStatus",id?"Reservation updated.":"Reservation created.",true);resetCustomerForm();await loadCustomerBookings();
+};
+
+function setAdminView(view){
+  document.querySelectorAll(".side-btn[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
+  document.querySelectorAll(".admin-view").forEach(v=>v.classList.toggle("active",v.id==="view-"+view));
+  const titles={overview:["Booking management","Reservations, payments, check-in and lane sessions."],bookings:["Manage bookings","Review and update every reservation in the range."],lanes:["Manage lanes","Open or temporarily close range lanes."],services:["Manage services","Control session types, durations and pricing."],users:["Manage users","Review customers and administrator accounts."]};
+  $("adminTitle").textContent=titles[view][0];$("adminSubtitle").textContent=titles[view][1];
+  if(view==="bookings")renderAdminBookings();if(view==="lanes")renderLanes();if(view==="services")renderServices();if(view==="users")renderUsers();
+}
+document.querySelectorAll(".side-btn[data-view]").forEach(b=>b.onclick=()=>setAdminView(b.dataset.view));
+
+async function loadAdminData(){
+  const [b,u,s,l]=await Promise.all([
+    sb.from("reservations").select("*,services(name),profiles(full_name,email,phone)").order("start_time",{ascending:true}),
+    sb.from("profiles").select("id,full_name,email,phone,role,created_at").order("created_at",{ascending:false}),
+    sb.from("services").select("*").order("name"),
+    sb.from("range_lanes").select("*").order("lane_number")
+  ]);
+  for(const r of [b,u,s,l])if(r.error)throw r.error;
+  adminBookings=b.data||[];adminUsers=u.data||[];services=s.data||[];lanes=l.data||[];
+  renderAdminStats();renderUpcoming();renderAdminBookings();renderLanes();renderServices();renderUsers();
+}
+function renderAdminStats(){
+  const today=adminBookings.filter(r=>new Date(r.start_time).toLocaleDateString("en-CA")===todayKey()&&!["cancelled","no_show"].includes(r.status));
+  const pendingPay=adminBookings.filter(r=>["unpaid","pending_verification"].includes(r.payment_status)&&!["cancelled","no_show"].includes(r.status));
+  const checked=adminBookings.filter(r=>r.status==="checked_in"),active=adminBookings.filter(r=>r.status==="in_progress"),completed=adminBookings.filter(r=>r.status==="completed");
+  $("adminStats").innerHTML=[["Today",today.length],["Awaiting payment",pendingPay.length],["Checked in",checked.length],["On lane",active.length],["Completed",completed.length]].map(x=>`<div class="stat"><strong>${x[1]}</strong><span>${x[0]}</span></div>`).join("");
+  $("todaySummary").textContent=`${today.length} active booking${today.length===1?"":"s"} scheduled today.`;
+  $("paymentSummary").textContent=`${pendingPay.length} booking${pendingPay.length===1?"":"s"} need payment review.`;
+  $("laneSummary").textContent=`${lanes.filter(x=>x.active).length} of ${lanes.length} lanes currently open.`;
+}
+function renderUpcoming(){
+  const now=Date.now(),rows=adminBookings.filter(r=>new Date(r.start_time).getTime()>=now&&!["cancelled","no_show"].includes(r.status)).slice(0,8);
+  $("upcomingRows").innerHTML=rows.map(r=>`<tr><td><strong>${esc(r.booking_code)}</strong><br><span class="muted">${esc(r.services?.name||"")}</span></td><td>${esc(r.customer_name)}<br><span class="muted">${esc(r.customer_phone||r.profiles?.phone||"")}</span></td><td>${fmt(r.start_time)}</td><td>Lane ${r.lane_number}</td><td>${statusPill(r.status)}</td><td>${statusPill(r.payment_status)}</td></tr>`).join("")||`<tr><td colspan="6">No upcoming reservations.</td></tr>`;
+}
+function filteredBookings(){
+  const q=($("bookingSearch").value||"").toLowerCase().trim();
+  return adminBookings.filter(r=>(adminFilter==="all"||r.status===adminFilter)&&(!q||[r.booking_code,r.customer_name,r.customer_phone,r.profiles?.email,r.services?.name].join(" ").toLowerCase().includes(q)));
+}
+function renderAdminBookings(){
+  const rows=filteredBookings();
+  $("adminRows").innerHTML=rows.map(r=>`<tr>
+    <td><strong>${esc(r.customer_name)}</strong><br><span class="muted">${esc(r.booking_code)} · ${esc(r.profiles?.email||"")}</span></td>
+    <td><strong>Lane ${r.lane_number}</strong><br><span class="muted">${r.guests} archer(s)</span></td>
+    <td>${fmt(r.start_time)}<br><span class="muted">${Math.round((new Date(r.end_time)-new Date(r.start_time))/60000)} min · ${esc(r.services?.name||"")}</span></td>
+    <td>${statusPill(r.payment_status)}<br><span class="muted">${esc(r.payment_method)}${r.payment_reference?" · "+esc(r.payment_reference):""}</span></td>
+    <td>${statusPill(r.status)}</td>
+    <td>${money(r.amount_paid)} / ${money(r.amount_due)}</td>
+    <td><button class="btn small secondary" onclick="adminEdit('${r.id}')">Change</button>
+      ${r.payment_status!=="paid"&&!["cancelled","no_show"].includes(r.status)?`<button class="btn small warn" onclick="confirmPayment('${r.id}')">${r.payment_status==="pending_verification"?"Review payment":"Confirm payment"}</button>`:""}
+      ${r.status==="pending"?`<button class="btn small" onclick="adminStatus('${r.id}','confirmed')">Confirm</button>`:""}
+      ${r.status==="confirmed"?`<button class="btn small" onclick="adminStatus('${r.id}','checked_in')">Check in</button>`:""}
+      ${r.status==="checked_in"?`<button class="btn small" onclick="adminStatus('${r.id}','in_progress')">Start lane</button>`:""}
+      ${r.status==="in_progress"?`<button class="btn small" onclick="adminStatus('${r.id}','completed')">Complete</button>`:""}
+      ${["pending","confirmed","checked_in"].includes(r.status)?`<button class="btn small danger" onclick="adminStatus('${r.id}','cancelled')">Cancel</button>`:""}
+      ${r.status==="confirmed"&&new Date(r.start_time)<new Date()?`<button class="btn small danger" onclick="adminStatus('${r.id}','no_show')">No-show</button>`:""}
+    </td>
+  </tr>`).join("")||`<tr><td colspan="7">No reservations match this filter.</td></tr>`;
+}
+document.querySelectorAll(".filter-btn").forEach(b=>b.onclick=()=>{adminFilter=b.dataset.filter;document.querySelectorAll(".filter-btn").forEach(x=>x.classList.toggle("active",x===b));renderAdminBookings();});
+$("bookingSearch").oninput=renderAdminBookings;
+$("refreshAdminBtn").onclick=async()=>{try{await loadAdminData()}catch(e){alert(e.message)}};
+
+function openModal(title,sub,body){$("modalTitle").textContent=title;$("modalSub").textContent=sub||"";$("modalBody").innerHTML=body;$("modalBackdrop").classList.remove("hidden")}
+function closeModal(){$("modalBackdrop").classList.add("hidden");$("modalBody").innerHTML=""}
+$("closeModal").onclick=closeModal;$("modalBackdrop").onclick=e=>{if(e.target.id==="modalBackdrop")closeModal()};
+
+window.adminEdit=id=>{
+  const r=adminBookings.find(x=>x.id===id);if(!r)return;
+  openModal("Edit reservation",`${r.booking_code} · ${r.customer_name}`,`
+    <form id="editBookingForm"><div class="grid">
+      <div class="field"><label>Date</label><input id="mDate" type="date" value="${new Date(r.start_time).toLocaleDateString("en-CA")}" required></div>
+      <div class="field"><label>Start time</label><input id="mTime" type="time" value="${new Date(r.start_time).toTimeString().slice(0,5)}" required></div>
+      <div class="field"><label>Service</label><select id="mService">${services.map(s=>`<option value="${s.id}" ${s.id===r.service_id?"selected":""}>${esc(s.name)} — ${money(s.price)}</option>`).join("")}</select></div>
+      <div class="field"><label>Lane</label><select id="mLane">${lanes.map(l=>`<option value="${l.lane_number}" ${l.lane_number===r.lane_number?"selected":""}>Lane ${l.lane_number}${l.active?"":" (closed)"}</option>`).join("")}</select></div>
+      <div class="field"><label>Archers</label><input id="mGuests" type="number" min="1" max="10" value="${r.guests}"></div>
+      <div class="field"><label>Amount due</label><input id="mAmount" type="number" min="0" step=".01" value="${r.amount_due}"></div>
+      <div class="field"><label>Payment method</label><select id="mPayMethod"><option value="gcash" ${r.payment_method==="gcash"?"selected":""}>GCash</option><option value="cash" ${r.payment_method==="cash"?"selected":""}>Cash</option></select></div>
+      <div class="field"><label>Payment status</label><select id="mPayStatus">${["unpaid","pending_verification","paid","refunded"].map(x=>`<option value="${x}" ${r.payment_status===x?"selected":""}>${x.replaceAll("_"," ")}</option>`).join("")}</select></div>
+      <div class="field full"><label>Customer notes</label><textarea id="mNotes">${esc(r.notes||"")}</textarea></div>
+      <div class="field full"><label>Admin notes</label><textarea id="mAdminNotes">${esc(r.admin_notes||"")}</textarea></div>
+    </div><div class="form-actions"><button class="btn" type="submit">Save changes</button><button class="btn secondary" type="button" onclick="closeModal()">Cancel</button></div></form>`);
+  $("editBookingForm").onsubmit=async e=>{
+    e.preventDefault();const svc=services.find(x=>x.id===$("mService").value),start=new Date(`${$("mDate").value}T${$("mTime").value}:00`);
+    const end=new Date(start.getTime()+(svc?.duration_minutes||60)*60000);
+    const q=await sb.from("reservations").update({service_id:svc.id,start_time:start.toISOString(),end_time:end.toISOString(),lane_number:Number($("mLane").value),guests:Number($("mGuests").value),amount_due:Number($("mAmount").value),payment_method:$("mPayMethod").value,payment_status:$("mPayStatus").value,notes:$("mNotes").value,admin_notes:$("mAdminNotes").value}).eq("id",id);
+    if(q.error)alert(q.error.message);else{closeModal();await loadAdminData();}
+  };
+};
+window.confirmPayment=async id=>{
+  const r=adminBookings.find(x=>x.id===id);if(!r)return;
+  openModal("Review payment",`${r.booking_code} · ${r.customer_name}`,`
+    <div class="notice">Payment method: <strong>${esc(r.payment_method)}</strong><br>Amount due: <strong>${money(r.amount_due)}</strong><br>Current reference: <strong>${esc(r.payment_reference||"None")}</strong></div>
+    <form id="payForm"><div class="grid"><div class="field"><label>Payment reference / receipt note</label><input id="payRef" value="${esc(r.payment_reference||"")}" placeholder="GCash reference or cash receipt note"></div><div class="field"><label>Amount paid</label><input id="payAmount" type="number" min="0" step=".01" value="${r.amount_due}"></div></div><div class="form-actions"><button class="btn" type="submit">Confirm payment</button></div></form>`);
+  $("payForm").onsubmit=async e=>{e.preventDefault();const q=await sb.from("reservations").update({payment_status:"paid",amount_paid:Number($("payAmount").value),payment_reference:$("payRef").value.trim()||null,payment_confirmed_at:new Date().toISOString(),status:r.status==="pending"?"confirmed":r.status}).eq("id",id);if(q.error)alert(q.error.message);else{closeModal();await loadAdminData();}};
+};
+window.adminStatus=async(id,newStatus)=>{
+  const r=adminBookings.find(x=>x.id===id);if(!r)return;
+  if(!confirm(`Change ${r.booking_code} to ${newStatus.replaceAll("_"," ")}?`))return;
+  const now=new Date().toISOString(),p={status:newStatus};
+  if(newStatus==="checked_in")p.checked_in_at=now;if(newStatus==="in_progress")p.started_at=now;if(newStatus==="completed")p.completed_at=now;if(newStatus==="cancelled")p.cancelled_at=now;
+  const q=await sb.from("reservations").update(p).eq("id",id);if(q.error)alert(q.error.message);else await loadAdminData();
+};
+
+function renderLanes(){
+  $("laneGrid").innerHTML=lanes.map(l=>`<div class="lane-card ${l.active?"open":"closed"}"><strong>Lane ${l.lane_number}</strong><span class="muted">${esc(l.name||"Standard lane")}</span><div class="lane-state">${l.active?"OPEN":"CLOSED"}</div><button class="btn small ${l.active?"danger":"accent"}" style="margin-top:10px" onclick="toggleLane('${l.id}',${l.active})">${l.active?"Close lane":"Open lane"}</button></div>`).join("");
+}
+window.toggleLane=async(id,active)=>{const q=await sb.from("range_lanes").update({active:!active}).eq("id",id);if(q.error)alert(q.error.message);else await loadAdminData();};
+
+function renderServices(){
+  $("serviceRows").innerHTML=services.map(s=>`<tr><td><strong>${esc(s.name)}</strong></td><td>${esc(s.description||"")}</td><td>${s.duration_minutes} min</td><td>${money(s.price)}</td><td>${statusPill(s.active?"active":"inactive")}</td><td><button class="btn small secondary" onclick="editService('${s.id}')">Edit</button> <button class="btn small ${s.active?"danger":"accent"}" onclick="toggleService('${s.id}',${s.active})">${s.active?"Disable":"Enable"}</button></td></tr>`).join("");
+}
+window.editService=id=>{
+  const s=services.find(x=>x.id===id);if(!s)return;
+  openModal("Edit service",s.name,`<form id="serviceForm"><div class="grid"><div class="field full"><label>Name</label><input id="sName" value="${esc(s.name)}" required></div><div class="field full"><label>Description</label><textarea id="sDesc">${esc(s.description||"")}</textarea></div><div class="field"><label>Duration (minutes)</label><input id="sDur" type="number" min="1" value="${s.duration_minutes}" required></div><div class="field"><label>Price</label><input id="sPrice" type="number" min="0" step=".01" value="${s.price}" required></div></div><div class="form-actions"><button class="btn" type="submit">Save service</button></div></form>`);
+  $("serviceForm").onsubmit=async e=>{e.preventDefault();const q=await sb.from("services").update({name:$("sName").value.trim(),description:$("sDesc").value.trim(),duration_minutes:Number($("sDur").value),price:Number($("sPrice").value)}).eq("id",id);if(q.error)alert(q.error.message);else{closeModal();await loadAdminData();}};
+};
+window.toggleService=async(id,active)=>{const q=await sb.from("services").update({active:!active}).eq("id",id);if(q.error)alert(q.error.message);else await loadAdminData();};
+$("addServiceBtn").onclick=()=>openModal("Add service","Create a new reservable session",`<form id="newServiceForm"><div class="grid"><div class="field full"><label>Name</label><input id="nsName" required></div><div class="field full"><label>Description</label><textarea id="nsDesc"></textarea></div><div class="field"><label>Duration (minutes)</label><input id="nsDur" type="number" min="1" value="60" required></div><div class="field"><label>Price</label><input id="nsPrice" type="number" min="0" step=".01" value="250" required></div></div><div class="form-actions"><button class="btn" type="submit">Add service</button></div></form>`);
+$("modalBody").addEventListener("submit",async e=>{if(e.target.id!=="newServiceForm")return;e.preventDefault();const q=await sb.from("services").insert({name:$("nsName").value.trim(),description:$("nsDesc").value.trim(),duration_minutes:Number($("nsDur").value),price:Number($("nsPrice").value)});if(q.error)alert(q.error.message);else{closeModal();await loadAdminData();}});
+
+function renderUsers(){
+  $("userRows").innerHTML=adminUsers.map(u=>`<tr><td><strong>${esc(u.full_name)}</strong></td><td>${esc(u.email)}</td><td>${esc(u.phone||"—")}</td><td>${statusPill(u.role)}</td><td>${fmt(u.created_at)}</td><td>${u.id===currentUser.id?"<span class='muted'>Current account</span>":`<button class="btn small secondary" onclick="toggleAdminRole('${u.id}','${u.role}')">${u.role==="admin"?"Make customer":"Make admin"}</button>`}</td></tr>`).join("");
+}
+window.toggleAdminRole=async(id,role)=>{
+  const next=role==="admin"?"customer":"admin";
+  if(!confirm(`Change this user's role to ${next}?`))return;
+  const q=await sb.from("profiles").update({role:next}).eq("id",id);if(q.error)alert(q.error.message);else await loadAdminData();
+};
+
+async function updateUI(session){
+  currentUser=session?.user||null;
+  if(!currentUser){showOnly("authPanel");$("publicNav").classList.remove("hidden");$("signedNav").classList.add("hidden");return;}
+  try{
+    await loadProfile();
+    $("publicNav").classList.add("hidden");$("signedNav").classList.remove("hidden");
+    if(currentProfile.role==="admin"){
+      showOnly("adminDashboard");$("adminName").textContent=currentProfile.full_name||"Admin";await loadAdminData();setAdminView("overview");
+    }else{
+      showOnly("customerDashboard");$("customerChip").textContent=`${currentProfile.full_name} · customer`;await loadServices();await loadLanes();await loadCustomerBookings();
+    }
+    goApp();
+  }catch(e){console.error(e);showOnly("authPanel");status("loginStatus",e.message||"Could not load account.");}
+}
+if(!configured){
+  status("loginStatus","Supabase is not configured. Replace SUPABASE_URL and SUPABASE_ANON_KEY in index.html.");
+  status("registerStatus","Supabase is not configured. Replace SUPABASE_URL and SUPABASE_ANON_KEY in index.html.");
+}else{
+  sb.auth.getSession().then(({data})=>updateUI(data.session));
+  sb.auth.onAuthStateChange((_event,session)=>updateUI(session));
+}
+</script>
+</body>
+</html>
