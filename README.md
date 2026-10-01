@@ -1,4 +1,4 @@
-# ArrowPoint Archery Range Reservation System
+# TargeTara Archery Range Reservation System
 
 A single-page archery range reservation and front-desk operations system.
 
